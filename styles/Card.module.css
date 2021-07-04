@@ -1,0 +1,59 @@
+.container {
+  max-width: 1040px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container header {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  margin: 0 auto;
+  padding: 70px 170px 50px;
+  position: relative;
+}
+
+.container header h1 {
+  font-size: 3.6rem;
+  font-weight: 600;
+}
+
+.container header p {
+  color: #738a94;
+  font-family: Georgia, serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.4em;
+  margin: 20px 0 0;
+  border-bottom: 1px solid darkgrey;
+}
+
+.container header button {
+  position: absolute;
+  top: 16%;
+  right: 12%;
+}
+
+.container figure {
+  align-items: center;
+  background: #e4eaed;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  margin: 25px 0 50px;
+  overflow: hidden;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form div {
+  margin-bottom: 10px;
+}
+
+.form div textarea {
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+}

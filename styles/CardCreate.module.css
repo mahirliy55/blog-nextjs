@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.container input {
+    padding: 3rem 0;
+    font-size: 24px;
+}
+
+.container textarea {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.container button {
+    padding: 10px;
+}
