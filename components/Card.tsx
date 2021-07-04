@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
@@ -10,6 +11,15 @@ import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 
 import styles from '../styles/Card.module.css'
+
+import Button from '@material-ui/core/Button'
+
+import {
+  addBlog,
+  putBlog,
+  delBlog,
+  addComment,
+} from '../store/actions/blogActions'
 
 interface Props {
   data?: any
@@ -38,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const Card = ({ data }: Props) => {
+  const dispatch = useDispatch()
   const classes = useStyles()
   let router = useRouter()
 
@@ -56,57 +67,36 @@ const Card = ({ data }: Props) => {
     setOpen(false)
   }
 
-  const deleteBlog = async (blogID: string) => {
-    const res = await fetch(
-      `https://simple-blog-api.crew.red/posts/${blogID}`,
-      {
-        method: 'DELETE',
-      }
-    )
-
-    if (res.ok) {
-      router.push('/')
-    }
+  const deleteBlog = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    blogID: string
+  ) => {
+    event.preventDefault()
+    dispatch(delBlog(blogID))
+  }
+  const stateDel = useSelector((state) => state.blog)
+  if (stateDel.deleted) {
+    router.push('/')
   }
 
-  const editBlog = async (event: React.FormEvent<HTMLFormElement>, blogID: string) => {
+  const editBlog = async (
+    event: React.FormEvent<HTMLFormElement>,
+    blogID: string
+  ) => {
     event.preventDefault()
-
-    const res = await fetch(
-      `https://simple-blog-api.crew.red/posts/${blogID}`,
-      {
-        body: JSON.stringify({
-          title: title,
-          body: body,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-      }
+    dispatch(
+      putBlog(blogID, {
+        title: title,
+        body: body,
+      })
     )
-    
-    if(res.ok) {
-      data.title = title
-      data.body = body
-
-      setOpen(false)
-    }
+    setOpen(false)
   }
 
   const createComment = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    const res = await fetch('https://simple-blog-api.crew.red/comments', {
-      body: JSON.stringify({
-        postId: data.id,
-        body: comment,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    })
+    dispatch(addComment({ postId: data.id, body: comment }))
 
     setComment('')
   }
@@ -124,10 +114,22 @@ const Card = ({ data }: Props) => {
           <header>
             <h1>{data.title}</h1>
             <p>{data.body}</p>
-            <button onClick={() => deleteBlog(data.id)}>Delete</button>
-            <button style={{ right: '20%' }} type="button" onClick={handleOpen}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={(event) => deleteBlog(event, data.id)}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ right: '22%' }}
+              type="button"
+              onClick={handleOpen}
+            >
               Edit
-            </button>
+            </Button>
           </header>
         </article>
         <figure>
@@ -140,7 +142,7 @@ const Card = ({ data }: Props) => {
         <section>
           <h3>Comments</h3>
           <ul>
-            {data.comments.map((comment: string, index: number) => (
+            {data.comments?.map((comment: string, index: number) => (
               <li key={index}>{comment.body}</li>
             ))}
           </ul>
@@ -157,7 +159,9 @@ const Card = ({ data }: Props) => {
               placeholder="Write body"
             />
 
-            <button type="submit">Create Comment</button>
+            <Button variant="contained" color="primary" type="submit">
+              Create Comment
+            </Button>
           </form>
         </section>
       </div>
@@ -201,7 +205,9 @@ const Card = ({ data }: Props) => {
                 />
               </div>
               <div>
-                <button type="submit">Edit</button>
+                <Button variant="contained" color="primary" type="submit">
+                  Edit
+                </Button>
               </div>
             </form>
           </div>

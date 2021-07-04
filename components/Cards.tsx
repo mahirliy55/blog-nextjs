@@ -18,24 +18,26 @@ const Cards = ({ data }: DataProps) => {
 
   return (
     <>
-      {cards.reverse()?.map((card: Card , index: number) => (
-        <div className={styles.cards} key={card.id}>
-          <Link href={`/posts/${card.id}`}>
-            <a>
-              <div className={styles.card}>
-                <div className={styles.cardBody}>
-                  <img
-                    src={`https://picsum.photos/320/200?random=${index}`}
-                    alt={card.title}
-                  />
-                  <h2>{card.title}</h2>
-                  <p>{card.body}</p>
+      {cards
+        .sort((a, b) => b.id - a.id)
+        ?.map((card: Card, index: number) => (
+          <div className={styles.cards} key={card.id}>
+            <Link href={`/posts/${card.id}`}>
+              <a>
+                <div className={styles.card}>
+                  <div className={styles.cardBody}>
+                    <img
+                      src={`https://picsum.photos/320/200?random=${index}`}
+                      alt={card.title}
+                    />
+                    <h2>{card.title}</h2>
+                    <p>{card.body}</p>
+                  </div>
                 </div>
-              </div>
-            </a>
-          </Link>
-        </div>
-      ))}
+              </a>
+            </Link>
+          </div>
+        ))}
     </>
   )
 }

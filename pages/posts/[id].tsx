@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
+import { fetchblog } from '../../store/actions/blogActions'
 
 import Card from '../../components/Card'
 
@@ -7,22 +10,22 @@ interface Props {
 }
 
 const Post = (props: Props) => {
+  const router = useRouter()
+  const { id } = router.query
+  const detailBlog = useSelector((state) => state.blog)
+
+  console.log(detailBlog.blog)
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchblog(id))
+  }, [id])
+
   return (
     <>
-      <Card data={props.data} />
+      <Card data={detailBlog.blog} />
     </>
   )
-}
-
-export async function getServerSideProps({ params }) {
-  // Fetch data from external API
-  const res = await fetch(
-    `https://simple-blog-api.crew.red/posts/${params.id}?_embed=comments`
-  )
-  const data = await res.json()
-
-  // Pass data to the page via props
-  return { props: { data } }
 }
 
 export default Post

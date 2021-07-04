@@ -1,14 +1,24 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 
 import Cards from '../components/Cards'
 import styles from '../styles/Home.module.css'
+
+import { fetchblogs } from '../store/actions/blogActions'
 
 interface Props {
   data?: string[]
 }
 
 const Home = (props: Props) => {
+  const dispatch = useDispatch()
+  const blogState = useSelector((state) => state.blog)
+
+  useEffect(() => {
+    dispatch(fetchblogs())
+  }, [])
+
   return (
     <main className={styles.container}>
       <Head>
@@ -17,18 +27,8 @@ const Home = (props: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Cards data={props.data} />
+      <Cards data={blogState.blogs} />
     </main>
   )
 }
-
-export async function getServerSideProps() {
-  // Fetch data from external API
-  const res = await fetch(`https://simple-blog-api.crew.red/posts`)
-  const data = await res.json()
-
-  // Pass data to the page via props
-  return { props: { data } }
-}
-
 export default Home

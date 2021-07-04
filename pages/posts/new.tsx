@@ -1,42 +1,26 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import Head from 'next/head'
-
-import TextField from '@material-ui/core/TextField'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import TextareaAutosize from '@material-ui/core/TextareaAutosize'
-
 import styles from '../../styles/CardCreate.module.css'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '25ch',
-      },
-    },
-  })
-)
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import { addBlog } from '../../store/actions/blogActions'
 
 const New = () => {
-  const classes = useStyles()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
+  const dispatch = useDispatch()
 
   const createBlog = async (event: React.FormEvent) => {
     event.preventDefault()
-
-    const res = await fetch('https://simple-blog-api.crew.red/posts', {
-      body: JSON.stringify({
+    dispatch(
+      addBlog({
         title: title,
         body: body,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    })
-
+      })
+    )
     setTitle('')
     setBody('')
   }
@@ -53,8 +37,9 @@ const New = () => {
         <form
           action=""
           method="POST"
-          className={`${classes.root} ${styles.container}`}
+          className={styles.container}
           onSubmit={createBlog}
+          style={{ textAlign: 'center' }}
         >
           <TextField
             required
@@ -62,7 +47,9 @@ const New = () => {
             value={title}
             label="Title"
             onChange={(e) => setTitle(e.target.value)}
+            style={{ width: '20%' }}
           />
+
           <TextareaAutosize
             value={body}
             aria-label="minimum height"
@@ -70,8 +57,16 @@ const New = () => {
             rowsMin={10}
             cols={30}
             placeholder="Write body"
+            style={{ width: '20%' }}
           />
-          <button type="submit">Create Blog</button>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            style={{ width: '20%' }}
+          >
+            Create Blog
+          </Button>
         </form>
       </React.Fragment>
     </div>

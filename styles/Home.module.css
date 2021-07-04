@@ -42,6 +42,9 @@
     overflow-y: hidden;
     height: 100%;
   }
+  .cardBody{
+    width: 100%;
+  }
 }
 
 @media screen and (min-width:425px) and (max-width:768px) {
@@ -55,10 +58,19 @@
     margin-top: 5rem;
     overflow-y: hidden;
     height: 100vh;
+    text-align: center;
   }
 
   .cardBody {
-    width: 70%;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .cardBody h2{
+    width: 80%;
+    margin: 0 auto;
+  }
+  .cardBody p{
+    width: 80%;
     margin: 0 auto;
   }
 }
